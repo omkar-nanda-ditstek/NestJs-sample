@@ -2,7 +2,8 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ResponseInterceptor } from './common/interceptor/response.interceptor';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-
+import { WinstonModule } from 'nest-winston';
+import * as winston from 'winston';
 /**
  * The url endpoint for open api ui
  * @type {string}
@@ -17,7 +18,8 @@ export const SWAGGER_API_NAME = 'Nest-Js Sample API';
  * A short description of the api
  * @type {string}
  */
-export const SWAGGER_API_DESCRIPTION = 'This is a sample API description for the Nest-JS module';
+export const SWAGGER_API_DESCRIPTION =
+  'This is a sample API description for the Nest-JS module';
 /**
  * Current version of the api
  * @type {string}
@@ -25,7 +27,29 @@ export const SWAGGER_API_DESCRIPTION = 'This is a sample API description for the
 export const SWAGGER_API_CURRENT_VERSION = '1.0';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    logger: WinstonModule.createLogger({
+      transports: [
+        new winston.transports.Console({
+          format: winston.format.combine(
+            winston.format.timestamp(),
+            winston.format.prettyPrint(),
+            winston.format.colorize({ all: true }),
+            winston.format.printf(({ timestamp, level, message, context }) => {
+              return `${timestamp} [${context || 'Application'}] ${level}: ${message}`;
+            }),
+          ),
+        }),
+        new winston.transports.File({
+          filename: 'combined.log',
+          format: winston.format.combine(
+            winston.format.timestamp(),
+            winston.format.json(),
+          ),
+        }),
+      ],
+    }),
+  });
   // Apply Response Interceptor globally
   app.useGlobalInterceptors(new ResponseInterceptor());
 

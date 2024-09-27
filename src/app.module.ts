@@ -5,6 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from './config/config.module';
 import { ConfigService } from './config/config.service';
+import { LoggerModule } from './logger/logger.module';
 @Module({
   imports: [
     MongooseModule.forRootAsync({
@@ -15,6 +16,7 @@ import { ConfigService } from './config/config.service';
       }),
     }),
     AuthModule,
+    LoggerModule,
   ],
   controllers: [AppController],
   providers: [AppService],
