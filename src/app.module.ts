@@ -6,6 +6,8 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from './config/config.module';
 import { ConfigService } from './config/config.service';
 import { LoggerModule } from './logger/logger.module';
+import { Role, RoleSchema } from 'src/schemas/role.schema';
+
 @Module({
   imports: [
     MongooseModule.forRootAsync({
@@ -16,6 +18,7 @@ import { LoggerModule } from './logger/logger.module';
       }),
     }),
     AuthModule,
+    MongooseModule.forFeature([{ name: Role.name, schema: RoleSchema }]),
     LoggerModule,
   ],
   controllers: [AppController],
