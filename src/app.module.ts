@@ -7,6 +7,9 @@ import { ConfigModule } from './config/config.module';
 import { ConfigService } from './config/config.service';
 import { LoggerModule } from './logger/logger.module';
 import { Role, RoleSchema } from 'src/schemas/role.schema';
+import { User, UserSchema } from 'src/schemas/user.schema';
+import { UserModule } from './user/user.module';
+
 
 @Module({
   imports: [
@@ -18,7 +21,10 @@ import { Role, RoleSchema } from 'src/schemas/role.schema';
       }),
     }),
     AuthModule,
+    UserModule,
     MongooseModule.forFeature([{ name: Role.name, schema: RoleSchema }]),
+    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
+
     LoggerModule,
   ],
   controllers: [AppController],

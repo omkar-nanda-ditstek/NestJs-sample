@@ -1,13 +1,7 @@
 enum Roles {
-  USER = 'User',
-  ADMIN = 'Admin',
-  SUPER_ADMIN = 'Super Admin',
+  USER = 'user',
+  ADMIN = 'admin',
+  SUPER_ADMIN = 'super_admin',
 }
 
-export enum Permissions {
-  CREATE = 'create',
-  READ = 'read',
-  UPDATE = 'update',
-  DELETE = 'delete',
-}
 export default Roles;
