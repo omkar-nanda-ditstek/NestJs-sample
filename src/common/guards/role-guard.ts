@@ -34,31 +34,44 @@ export class RolesGuard implements CanActivate {
     // Fetch user data from the database
     const [user] = await this.userModel.aggregate([
       { $match: { _id: new ObjectId(decoded.sub) } },
-      {
-        $lookup: {
-          from: 'roles',
-          let: { userRoles: '$roles' },
-          pipeline: [
-            { $match: { $expr: { $in: ['$_id', '$$userRoles'] } } },
-            {
-              $lookup: {
-                from: 'permissions',
-                localField: 'permissions',
-                foreignField: '_id',
-                as: 'permissionsDetails',
-              },
-            },
-            {
-              $project: {
-                role: 1,
-                permissions: '$permissionsDetails', // Adjust field based on your permission schema
-              },
-            },
-          ],
-          as: 'roleDetails',
-        },
-      },
+      // {
+      //   $lookup: {
+      //     from: 'roles',
+      //     let: { userRoles: '$roles' },
+      //     pipeline: [
+      //       { $match: { $expr: { $in: ['$_id', '$$userRoles'] } } },
+      //       {
+      //         $lookup: {
+      //           from: 'permissions',
+      //           localField: 'permissions',
+      //           foreignField: '_id',
+      //           as: 'permissionsDetails',
+      //         },
+      //       },
+      //       {
+      //         $project: {
+      //           role: 1,
+      //           permissions: '$permissionsDetails', // Adjust field based on your permission schema
+      //         },
+      //       },
+      //     ],
+      //     as: 'roleDetails',
+      //   },
+      // },
+      { $lookup: {
+        from: "roles",
+        localField: "roles",
+        foreignField: "_id",
+        as: "roles"
+      } },
+      { $lookup: {
+        from: "permissions",
+        localField: "permissions",
+        foreignField: "_id",
+        as: "permissions"
+      } }
     ]);
+    console.log(JSON.stringify(user))
     if (!user) {
       throw new ForbiddenException('User not found');
     }
@@ -66,13 +79,13 @@ export class RolesGuard implements CanActivate {
     if (user.isUserSuperAdmin) {
       return true;
     }
-    if (!user.roleDetails.length) {
+    if (!user.roles.length) {
       throw new ForbiddenException(
         'Access denied: You do not have the required role',
       );
     }
     // Mapping to add the level based on the role
-    user.roleDetails.map((roleDetail) => {
+    user.roles.map((roleDetail) => {
       let level;
 
       switch (roleDetail.role) {
@@ -90,7 +103,7 @@ export class RolesGuard implements CanActivate {
     });
 
     // Sort roles by level in ascending order
-    user.roleDetails.sort(
+    user.roles.sort(
       (a, b) => (a.level ?? Infinity) - (b.level ?? Infinity),
     );
 
@@ -107,7 +120,7 @@ export class RolesGuard implements CanActivate {
       context.getHandler(),
     );
 
-    const matchedRoles = user.roleDetails.filter((roleDetail) =>
+    const matchedRoles = user.roles.filter((roleDetail) =>
       allowedRoles.includes(roleDetail.role),
     );
     // console.log('matchedRoles:', matchedRoles);
@@ -119,11 +132,11 @@ export class RolesGuard implements CanActivate {
     }
 
     if (allowedModule && allowedPermissions) {
-      const userPermissions = matchedRoles.flatMap(
-        (roleDetail) => roleDetail.permissions,
-      );
+      // const userPermissions = matchedRoles.flatMap(
+      //   (roleDetail) => roleDetail.permissions,
+      // );
       // Check if user has the required permission for the allowed module
-      const hasRequiredPermission = userPermissions.some(
+      const hasRequiredPermission = user.permissions.some(
         (userPerm) =>
           userPerm.module === allowedModule &&
           allowedPermissions.includes(userPerm.action),

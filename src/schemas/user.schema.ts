@@ -13,6 +13,9 @@ export class User {
 
   @Prop({ type: [{ type: Types.ObjectId, ref: 'Role' }], default: [] })
   roles: Types.ObjectId[];
+
+  @Prop({ type: [{ type: Types.ObjectId, ref: 'Permission' }], default: [] })
+  permissions: Types.ObjectId[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
