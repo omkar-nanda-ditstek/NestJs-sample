@@ -7,7 +7,7 @@ import {
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { Model } from 'mongoose';
-import { User, UserDocument } from '../../schemas/user.schema';
+import { User, UserDocument } from '../../db/schemas/user.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { ObjectId } from 'mongodb';
 import RoleLevel from '../enums/RoleLevels';
@@ -26,7 +26,7 @@ export class RolesGuard implements CanActivate {
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       throw new Error('Authorization header is missing or invalid');
-  }
+    }
 
     const token = authHeader.split(' ')[1];
     const decoded = this.jwtService.verify(token, { secret: 'secretKey' });

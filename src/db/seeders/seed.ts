@@ -1,7 +1,7 @@
 import { MongoClient, ObjectId } from 'mongodb';
-import Roles from '../../src/common/enums/Roles';
-import Permissions from '../../src/common/enums/Permissions';
-import Modules from '../../src/common/enums/Modules';
+import Roles from '../../../src/common/enums/Roles';
+import Permissions from '../../../src/common/enums/Permissions';
+import Modules from '../../../src/common/enums/Modules';
 import * as bcrypt from 'bcryptjs';
 
 const mongoUrl = 'mongodb://localhost:27017'; // Change this to your MongoDB connection string

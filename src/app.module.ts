@@ -2,13 +2,13 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
-import { AuthModule } from './auth/auth.module';
+import { AuthModule } from './apps/auth/auth.module';
 import { ConfigModule } from './config/config.module';
 import { ConfigService } from './config/config.service';
-import { LoggerModule } from './logger/logger.module';
-import { Role, RoleSchema } from 'src/schemas/role.schema';
-import { User, UserSchema } from 'src/schemas/user.schema';
-import { UserModule } from './user/user.module';
+import { LoggerModule } from './common/logger/logger.module';
+import { Role, RoleSchema } from './db/schemas/role.schema';
+import { User, UserSchema } from './db/schemas/user.schema';
+import { UserModule } from './apps/user/user.module';
 
 
 @Module({
