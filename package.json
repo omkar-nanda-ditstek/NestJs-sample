@@ -20,7 +20,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "migrate:up": "ts-node -O '{\"module\":\"commonjs\"}' ./node_modules/migrate-mongo/bin/migrate-mongo up",
     "migrate:down": "ts-node -O '{\"module\":\"commonjs\"}' ./node_modules/migrate-mongo/bin/migrate-mongo down",
-    "mongo-seed": "ts-node src/seeders/seed.ts",
+    "seed": "ts-node src/seeders/seed.ts",
     "prepare": "husky"
   },
   "dependencies": {

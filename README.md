@@ -26,17 +26,44 @@
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
+NestJS is a framework for building efficient, scalable Node.js server-side applications. It leverages progressive JavaScript and is built with TypeScript, fully supporting developers who prefer pure JavaScript. The framework combines principles of Object-Oriented Programming (OOP), Functional Programming (FP), and Functional Reactive Programming (FRP) to create robust and maintainable applications.
+
+## Prerequisites
+
+Before you begin, ensure you have the following installed:
+
+- **Node.js** (version 14 or later)
+- **NestJS CLI**
+- **Mongo-migration** (for database migrations)
+- **MongoDB**
+- **npm** (Node Package Manager)
+
+
 ## Project setup
 
 ```bash
 $ npm install
 ```
 
+## Database Setup
+
+```bash
+$ npm run migrate:up  # to migrate the tables/collection in the database
+```
+
+```bash
+$ npm run migrate:down  # to undo the mirgration (delete  the tables/collection) from the database
+```
+
+```bash
+$ npm run seed  # to seed(populate) data in the database
+```
+
 ## Compile and run the project
 
 ```bash
 # development
-$ npm run start
+$ npm  start
 
 # watch mode
 $ npm run start:dev
@@ -45,41 +72,18 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-## Run tests
 
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
 
 ## Resources
 
-Check out a few resources that may come in handy when working with NestJS:
+Check out a few resources that may come in handy when working with NestJs:
 
 - Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+- Visit [NodeJs Documentaion](https://nodejs.org/en/download/package-manager) to learn more about the nodejs
+- Visit [MonogDB Documentaion](https://www.mongodb.com/)to learn more about the MonogDB
+
 
 ## Support
 
 Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
 
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
