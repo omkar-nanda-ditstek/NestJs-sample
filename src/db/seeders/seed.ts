@@ -16,32 +16,54 @@ const seedDatabase = async () => {
 
     // Define the permissions data
     const permissions = [
-      { _id: new ObjectId(), module: Modules.PRODUCT, action: Permissions.CREATE },
-      { _id: new ObjectId(), module: Modules.PRODUCT, action: Permissions.READ },
-      { _id: new ObjectId(), module: Modules.PRODUCT, action: Permissions.UPDATE },
-      { _id: new ObjectId(), module: Modules.PRODUCT, action: Permissions.DELETE },
+      {
+        _id: new ObjectId(),
+        module: Modules.PRODUCT,
+        action: Permissions.CREATE,
+      },
+      {
+        _id: new ObjectId(),
+        module: Modules.PRODUCT,
+        action: Permissions.READ,
+      },
+      {
+        _id: new ObjectId(),
+        module: Modules.PRODUCT,
+        action: Permissions.UPDATE,
+      },
+      {
+        _id: new ObjectId(),
+        module: Modules.PRODUCT,
+        action: Permissions.DELETE,
+      },
     ];
 
     // Insert permissions into the permissions collection
-    const permissionResult = await db.collection('permissions').insertMany(permissions);
+    const permissionResult = await db
+      .collection('permissions')
+      .insertMany(permissions);
     console.log('Inserted permissions:', permissionResult.insertedIds);
 
     // Define the roles data
     const roles = [
-      { 
-        _id: new ObjectId(), 
-        role: Roles.SUPER_ADMIN, 
-        permissions: permissionResult.insertedIds // All permissions
+      {
+        _id: new ObjectId(),
+        role: Roles.SUPER_ADMIN,
+        permissions: permissionResult.insertedIds, // All permissions
       },
-      { 
-        _id: new ObjectId(), 
-        role: Roles.ADMIN, 
-        permissions: [permissionResult.insertedIds[1], permissionResult.insertedIds[0], permissionResult.insertedIds[2]] // Create, Read, Update
+      {
+        _id: new ObjectId(),
+        role: Roles.ADMIN,
+        permissions: [
+          permissionResult.insertedIds[1],
+          permissionResult.insertedIds[0],
+          permissionResult.insertedIds[2],
+        ], // Create, Read, Update
       },
-      { 
-        _id: new ObjectId(), 
-        role: Roles.USER,  
-        permissions: [permissionResult.insertedIds[0]] // Only Read
+      {
+        _id: new ObjectId(),
+        role: Roles.USER,
+        permissions: [permissionResult.insertedIds[0]], // Only Read
       },
     ];
 
@@ -55,28 +77,41 @@ const seedDatabase = async () => {
         email: 'superadmin@example.com',
         password: 'superadmin_password', // Plaintext password
         roles: [roleResult.insertedIds[0]], // Reference to super admin role
+        permissions: permissionResult.insertedIds,
       },
       {
         email: 'admin@example.com',
         password: 'admin_password', // Plaintext password
         roles: [roleResult.insertedIds[1]], // Reference to admin role
+        permissions: [
+          permissionResult.insertedIds[1],
+          permissionResult.insertedIds[0],
+          permissionResult.insertedIds[2],
+        ], // Create, Read, Update
       },
       {
         email: 'user@example.com',
         password: 'user_password', // Plaintext password
         roles: [roleResult.insertedIds[2]], // Reference to user role
+        permissions: [
+          permissionResult.insertedIds[1],
+          permissionResult.insertedIds[0],
+          permissionResult.insertedIds[2],
+        ], // Create, Read, Update
       },
     ];
-  
+
     // Hash the passwords
-    const users = await Promise.all(usersData.map(async (user) => {
-      const hashedPassword = await bcrypt.hash(user.password, 10); // Hash the password with 10 salt rounds
-      return {
-        email: user.email,
-        password: hashedPassword, // Store hashed password
-        roles: user.roles,
-      };
-    }));
+    const users = await Promise.all(
+      usersData.map(async (user) => {
+        const hashedPassword = await bcrypt.hash(user.password, 10); // Hash the password with 10 salt rounds
+        return {
+          email: user.email,
+          password: hashedPassword, // Store hashed password
+          roles: user.roles,
+        };
+      }),
+    );
 
     // Insert users into the users collection
     const userResult = await db.collection('users').insertMany(users);

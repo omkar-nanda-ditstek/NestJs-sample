@@ -45,6 +45,36 @@ export class ConfigService {
       WEBTOKEN_SECRET_KEY: joi.string().required(),
       WEBTOKEN_EXPIRATION_TIME: joi.number().default(1800),
       DB_URL: joi.string().regex(/^mongodb/),
+      EMAIL_PROVIDER: joi.string().valid('smtp', 'sendgrid').required(),
+      SMTP_HOST: joi.string().when('EMAIL_PROVIDER', {
+        is: 'smtp',
+        then: joi.required(),
+      }),
+      SMTP_PORT: joi.number().when('EMAIL_PROVIDER', {
+        is: 'smtp',
+        then: joi.required(),
+      }),
+      SMTP_USER: joi.string().when('EMAIL_PROVIDER', {
+        is: 'smtp',
+        then: joi.required(),
+      }),
+      SMTP_PASS: joi.string().when('EMAIL_PROVIDER', {
+        is: 'smtp',
+        then: joi.required(),
+      }),
+      SENDGRID_API_KEY: joi.string().when('EMAIL_PROVIDER', {
+        is: 'sendgrid',
+        then: joi.required(),
+      }),
+      FROM_EMAIL: joi.string().email().required(),
+      SMS_PROVIDER: joi.string().required(),
+      TWILIO_ACCOUNT_SID: joi.string().required(),
+      TWILIO_AUTH_TOKEN: joi.string().required(),
+      TWILIO_PHONE_NUMBER: joi.string().required(),
+      AWS_REGION: joi.string().required(),
+      AWS_ACCESS_KEY_ID: joi.string().required(),
+      AWS_SECRET_ACCESS_KEY: joi.string().required(),
+      AWS_S3_BUCKET_NAME: joi.string().required(),
     });
 
     /**

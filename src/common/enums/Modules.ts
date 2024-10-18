@@ -1,4 +1,4 @@
 export enum Modules {
-    PRODUCT = "product"
+  PRODUCT = 'product',
 }
-export default Modules
+export default Modules;

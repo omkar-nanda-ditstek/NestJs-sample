@@ -9,7 +9,10 @@ import { LoggerModule } from './common/logger/logger.module';
 import { Role, RoleSchema } from './db/schemas/role.schema';
 import { User, UserSchema } from './db/schemas/user.schema';
 import { UserModule } from './apps/user/user.module';
-
+import { EmailModule } from './utils/email/email.module';
+import { SmsModule } from './utils/sms/sms.module';
+import { UploadModule } from './utils/upload/upload.module';
+import { ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
   imports: [
@@ -20,12 +23,20 @@ import { UserModule } from './apps/user/user.module';
         uri: configService.get('DB_URL'),
       }),
     }),
-    AuthModule,
-    UserModule,
     MongooseModule.forFeature([{ name: Role.name, schema: RoleSchema }]),
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
-
+    ThrottlerModule.forRoot([
+      {
+        ttl: 60000,
+        limit: 5,
+      },
+    ]),
+    AuthModule,
+    UserModule,
     LoggerModule,
+    EmailModule,
+    SmsModule,
+    UploadModule,
   ],
   controllers: [AppController],
   providers: [AppService],

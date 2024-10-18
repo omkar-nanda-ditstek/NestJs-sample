@@ -58,20 +58,24 @@ export class RolesGuard implements CanActivate {
       //     as: 'roleDetails',
       //   },
       // },
-      { $lookup: {
-        from: "roles",
-        localField: "roles",
-        foreignField: "_id",
-        as: "roles"
-      } },
-      { $lookup: {
-        from: "permissions",
-        localField: "permissions",
-        foreignField: "_id",
-        as: "permissions"
-      } }
+      {
+        $lookup: {
+          from: 'roles',
+          localField: 'roles',
+          foreignField: '_id',
+          as: 'roles',
+        },
+      },
+      {
+        $lookup: {
+          from: 'permissions',
+          localField: 'permissions',
+          foreignField: '_id',
+          as: 'permissions',
+        },
+      },
     ]);
-    console.log(JSON.stringify(user))
+    console.log(JSON.stringify(user));
     if (!user) {
       throw new ForbiddenException('User not found');
     }
@@ -85,9 +89,8 @@ export class RolesGuard implements CanActivate {
       );
     }
     // Mapping to add the level based on the role
-    user.roles.map((roleDetail) => {
+    user.roles.forEach((roleDetail) => {
       let level;
-
       switch (roleDetail.role) {
         case 'admin':
           level = RoleLevel.ADMIN;
@@ -98,23 +101,16 @@ export class RolesGuard implements CanActivate {
         default:
           level = null; // or handle unexpected roles
       }
-
       roleDetail.level = level;
     });
 
     // Sort roles by level in ascending order
-    user.roles.sort(
-      (a, b) => (a.level ?? Infinity) - (b.level ?? Infinity),
-    );
+    user.roles.sort((a, b) => (a.level ?? Infinity) - (b.level ?? Infinity));
 
-    const allowedRoles = this.reflector.get<string[]>(
-      'roles',
-      context.getHandler(),
-    );
-    const allowedPermissions = this.reflector.get<string[]>(
-      'permissions',
-      context.getHandler(),
-    );
+    const allowedRoles =
+      this.reflector.get<string[]>('roles', context.getHandler()) || [];
+    const allowedPermissions =
+      this.reflector.get<string[]>('permissions', context.getHandler()) || [];
     const allowedModule = this.reflector.get<string>(
       'module',
       context.getHandler(),
@@ -142,7 +138,9 @@ export class RolesGuard implements CanActivate {
           allowedPermissions.includes(userPerm.action),
       );
       if (!hasRequiredPermission) {
-        throw new ForbiddenException(`Insufficient permissions for module '${allowedModule}': You do not have the required permissions`);
+        throw new ForbiddenException(
+          `Insufficient permissions for module '${allowedModule}': You do not have the required permissions`,
+        );
       }
     }
 

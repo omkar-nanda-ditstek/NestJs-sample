@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User, UserDocument } from '../../db/schemas/user.schema';
-import { Role, RoleDocument } from '../../db/schemas/role.schema'
+import { Role, RoleDocument } from '../../db/schemas/role.schema';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import { LoginUserDto } from '../auth/dto/login-user.dto';
 import * as bcrypt from 'bcryptjs';
@@ -41,6 +41,4 @@ export class AuthService {
       throw new Error(ResponseMessage.INVALID_CREDENTIALS);
     }
   }
-  
-  
 }
