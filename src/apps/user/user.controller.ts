@@ -7,6 +7,7 @@ import {
   UseInterceptors,
   UploadedFile,
   Get,
+  UsePipes,
 } from '@nestjs/common';
 import { RolesGuard } from '../../common/guards/role-guard';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
@@ -18,6 +19,10 @@ import { SmsService } from '../../utils/sms/sms.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UploadService } from '../../utils/upload/upload.service';
 import { ThrottlerGuard, Throttle } from '@nestjs/throttler';
+import { JoiValidationPipe } from '../../common/validations/joi-validation.pipe';
+import { sendEmailSchema } from './validation/email.validation';
+import { SendEmailDto } from './dto/send-email.dto';
+
 @ApiTags('profile')
 @ApiBearerAuth()
 @Controller('user')
@@ -41,16 +46,11 @@ export class UserController {
   //SEND-EMAIL TEST ROUTE
   @Post('send-email')
   @SetMetadata('roles', [Roles.ADMIN, Roles.USER])
+  @UsePipes(new JoiValidationPipe(sendEmailSchema))
   async sendEmail(
     @Body()
-    body: {
-      to: string;
-      subject: string;
-      text: string;
-      attachments?: any[];
-    },
+    body: SendEmailDto
   ) {
-    console.log('body:', body);
     return this.emailService.sendEmail(body.to, body.subject, body.text);
   }
 
