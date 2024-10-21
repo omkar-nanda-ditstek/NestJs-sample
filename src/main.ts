@@ -4,6 +4,7 @@ import { ResponseInterceptor } from './common/interceptor/response.interceptor';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { WinstonModule } from 'nest-winston';
 import * as winston from 'winston';
+import { VersioningType } from '@nestjs/common';
 /**
  * The url endpoint for open api ui
  * @type {string}
@@ -62,6 +63,10 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document); // API docs at /api
+
+  app.enableVersioning({
+    type: VersioningType.URI
+  })
 
   await app.listen(3000);
 }

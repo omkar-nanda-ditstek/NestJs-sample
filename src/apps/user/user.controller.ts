@@ -8,6 +8,7 @@ import {
   UploadedFile,
   Get,
   UsePipes,
+  Version,
 } from '@nestjs/common';
 import { RolesGuard } from '../../common/guards/role-guard';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
@@ -18,7 +19,7 @@ import { EmailService } from '../../utils/email/email.service';
 import { SmsService } from '../../utils/sms/sms.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UploadService } from '../../utils/upload/upload.service';
-import { ThrottlerGuard, Throttle } from '@nestjs/throttler';
+import { ThrottlerGuard } from '@nestjs/throttler';
 import { JoiValidationPipe } from '../../common/validations/joi-validation.pipe';
 import { sendEmailSchema } from './validation/email.validation';
 import { SendEmailDto } from './dto/send-email.dto';
@@ -35,12 +36,22 @@ export class UserController {
   ) {}
 
   // ADD PRODUCT ROUTE
+  @Version('1')
   @Post('add-product')
   @SetMetadata('roles', [Roles.ADMIN, Roles.USER])
   @SetMetadata('permissions', [Permissions.CREATE])
   @SetMetadata('module', Modules.PRODUCT)
-  addProduct(@Body() body: { productName: string }) {
-    return { message: `Product ${body.productName} added successfully` };
+  addProductV1(@Body() body: { productName: string }) {
+    return { message: `Product ${body.productName} added successfully V1` };
+  }
+
+  @Version('2')
+  @Post('add-product')
+  @SetMetadata('roles', [Roles.ADMIN, Roles.USER])
+  @SetMetadata('permissions', [Permissions.CREATE])
+  @SetMetadata('module', Modules.PRODUCT)
+  addProductV2(@Body() body: { productName: string }) {
+    return { message: `Product ${body.productName} added successfully V2` };
   }
 
   //SEND-EMAIL TEST ROUTE
