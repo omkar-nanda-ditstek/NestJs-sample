@@ -1,8 +1,10 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { AuthGuard } from '@nestjs/passport';
+
 
 @ApiTags('auth')
 @Controller('auth')
@@ -24,4 +26,10 @@ export class AuthController {
   async login(@Body() loginUserDto: LoginUserDto) {
     return this.authService.login(loginUserDto);
   }
+  @Post('social-login')
+  async socialLogin(@Body() body: { provider: string; providerToken: string }) {
+    const { provider, providerToken } = body;
+    return this.authService.socialLogin(provider, providerToken);
+  }
+
 }

@@ -6,7 +6,7 @@ import { User, UserSchema } from '../../db/schemas/user.schema';
 import { Role, RoleSchema } from '../../db/schemas/role.schema';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
-import { JwtStrategy } from '../auth/jwt.strategy';
+import { JwtStrategy } from '../auth/strategies/jwt.strategy';
 import { EmailModule } from '../../utils/email/email.module';
 import { SmsModule } from '../../utils/sms/sms.module';
 import { UploadModule } from '../../utils/upload/upload.module';

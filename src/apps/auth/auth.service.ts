@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User, UserDocument } from '../../db/schemas/user.schema';
@@ -8,6 +8,8 @@ import { LoginUserDto } from '../auth/dto/login-user.dto';
 import * as bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
 import ResponseMessage from 'src/common/enums/ResponseMessages';
+import { GoogleStrategy } from './strategies/google.strategy';
+
 
 @Injectable()
 export class AuthService {
@@ -15,6 +17,7 @@ export class AuthService {
     @InjectModel(User.name) private userModel: Model<UserDocument>,
     @InjectModel(Role.name) private roleModel: Model<RoleDocument>,
     private jwtService: JwtService,
+    private readonly googleStrategy: GoogleStrategy
   ) {}
 
   async register(createUserDto: CreateUserDto): Promise<User> {
@@ -41,4 +44,17 @@ export class AuthService {
       throw new Error(ResponseMessage.INVALID_CREDENTIALS);
     }
   }
-}
+
+  async socialLogin(provider: string, providerToken: string) {
+    switch (provider) {
+      case 'google':
+        return this.googleStrategy.validateToken(providerToken);
+      case 'apple':
+        return this.googleStrategy.validateToken(providerToken);
+      case 'facebook':
+        return this.googleStrategy.validateToken(providerToken);
+      default:
+        throw new BadRequestException('Unsupported social provider');
+    }
+  }
+ }

@@ -6,7 +6,7 @@ import { User, UserSchema } from '../../db/schemas/user.schema';
 import { Role, RoleSchema } from '../../db/schemas/role.schema';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
-import { JwtStrategy } from './jwt.strategy';
+import { JwtStrategy } from './strategies/jwt.strategy';
 
 @Module({
   imports: [
