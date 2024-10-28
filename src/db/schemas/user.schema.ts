@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
+import SocialTypes from '../../common/enums/SocialTypes';
 
 export type UserDocument = User & Document;
 
@@ -19,6 +20,12 @@ export class User {
 
   @Prop({ default: false })
   isSuperAdmin: boolean;
+
+  @Prop({enum: SocialTypes})
+  provider: SocialTypes;  // for social login
+
+  @Prop()
+  providerToken: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

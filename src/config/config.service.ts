@@ -75,6 +75,17 @@ export class ConfigService {
       AWS_ACCESS_KEY_ID: joi.string().required(),
       AWS_SECRET_ACCESS_KEY: joi.string().required(),
       AWS_S3_BUCKET_NAME: joi.string().required(),
+      GOOGLE_CLIENT_ID: joi.string().required(),
+      GOOGLE_CLIENT_SECRET: joi.string().required(),
+      GOOGLE_CALLBACK_URL: joi.string().required(),
+      FACEBOOK_APP_ID: joi.string().required(),
+      FACEBOOK_APP_SECRET: joi.string().required(),
+      FACEBOOK_CALLBACK_URL: joi.string().required(),
+      APPLE_CLIENT_ID: joi.string().required(),
+      APPLE_TEAM_ID: joi.string().required(),
+      APPLE_KEY_ID: joi.string().required(),
+      APPLE_PRIVATE_KEY: joi.string().required(),
+      APPLE_CALLBACK_URL: joi.string().required(),
     });
 
     /**

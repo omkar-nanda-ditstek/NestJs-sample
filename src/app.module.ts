@@ -13,6 +13,7 @@ import { EmailModule } from './utils/email/email.module';
 import { SmsModule } from './utils/sms/sms.module';
 import { UploadModule } from './utils/upload/upload.module';
 import { ThrottlerModule } from '@nestjs/throttler';
+import { NotificationsModule } from './utils/notifications/notifications.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
     EmailModule,
     SmsModule,
     UploadModule,
+    NotificationsModule
   ],
   controllers: [AppController],
   providers: [AppService],

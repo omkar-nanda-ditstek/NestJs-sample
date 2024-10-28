@@ -5,6 +5,8 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { WinstonModule } from 'nest-winston';
 import * as winston from 'winston';
 import { VersioningType } from '@nestjs/common';
+
+
 /**
  * The url endpoint for open api ui
  * @type {string}

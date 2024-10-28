@@ -23,6 +23,7 @@ import { ThrottlerGuard } from '@nestjs/throttler';
 import { JoiValidationPipe } from '../../common/validations/joi-validation.pipe';
 import { sendEmailSchema } from './validation/email.validation';
 import { SendEmailDto } from './dto/send-email.dto';
+import { NotificationsService } from '../../utils/notifications/notifications.service';
 
 @ApiTags('profile')
 @ApiBearerAuth()
@@ -33,6 +34,7 @@ export class UserController {
     private readonly emailService: EmailService,
     private readonly smsService: SmsService,
     private readonly fileUploadService: UploadService,
+    private readonly notificationsService: NotificationsService
   ) {}
 
   // ADD PRODUCT ROUTE
@@ -87,5 +89,14 @@ export class UserController {
   @SetMetadata('roles', [Roles.ADMIN, Roles.USER])
   getLimitedExample() {
     return 'This endpoint is rate limited to 5 requests per minute.';
+  }
+
+  @Post('single')
+  async sendSingle(
+    @Body('token') token: string,
+    @Body('title') title: string,
+    @Body('body') body: string,
+  ) {
+    return this.notificationsService.sendToSingleDevice(token, title, body);
   }
 }

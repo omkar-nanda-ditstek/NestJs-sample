@@ -10,6 +10,7 @@ import { JwtStrategy } from '../auth/strategies/jwt.strategy';
 import { EmailModule } from '../../utils/email/email.module';
 import { SmsModule } from '../../utils/sms/sms.module';
 import { UploadModule } from '../../utils/upload/upload.module';
+import { NotificationsModule } from '../../utils/notifications/notifications.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { UploadModule } from '../../utils/upload/upload.module';
     EmailModule,
     SmsModule,
     UploadModule,
+    NotificationsModule
   ],
   controllers: [UserController],
   providers: [UserService, JwtStrategy],
