@@ -5,16 +5,17 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, Profile } from 'passport-apple';
 import { AuthService } from '../auth.service'; // Adjust the path as necessary
 import { User } from '../../../db/schemas/user.schema'; // Adjust the path as necessary
+import { ConfigService } from '../../../config/config.service';
 
 @Injectable()
 export class AppleStrategy extends PassportStrategy(Strategy, 'apple') {
-  constructor(private readonly authService: AuthService) {
+  constructor(private readonly authService: AuthService, private configService: ConfigService) {
     super({
-      clientID: process.env.APPLE_CLIENT_ID,
-      teamID: process.env.APPLE_TEAM_ID,
-      keyID: process.env.APPLE_KEY_ID,
-      privateKey: process.env.APPLE_PRIVATE_KEY.replace(/\\n/g, '\n'), // Handle newline characters
-      callbackURL: process.env.APPLE_CALLBACK_URL,
+      clientID: configService.get('APPLE_CLIENT_ID'),
+      teamID: configService.get('APPLE_TEAM_ID'),
+      keyID: configService.get('APPLE_KEY_ID'),
+      privateKey: configService.get('APPLE_PRIVATE_KEY').replace(/\\n/g, '\n'), // Handle newline characters
+      callbackURL: configService.get('APPLE_CALLBACK_URL'),
       passReqToCallback: true,
     });
   }
