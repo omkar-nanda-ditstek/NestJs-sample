@@ -57,4 +57,11 @@ export class AuthService {
         throw new BadRequestException('Unsupported social provider');
     }
   }
+
+  async validateUser(profile: any): Promise<User | null> {
+    // Check if user exists in your database
+    // If not, create a new user and return it
+    // Return null if user not found
+    return
+  }
  }
