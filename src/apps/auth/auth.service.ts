@@ -9,15 +9,17 @@ import * as bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
 import ResponseMessage from 'src/common/enums/ResponseMessages';
 import { GoogleStrategy } from './strategies/google.strategy';
-
+import { Logger } from '@nestjs/common';
 
 @Injectable()
 export class AuthService {
+  private readonly logger = new Logger(AuthService.name);
+
   constructor(
     @InjectModel(User.name) private userModel: Model<UserDocument>,
     @InjectModel(Role.name) private roleModel: Model<RoleDocument>,
     private jwtService: JwtService,
-    private readonly googleStrategy: GoogleStrategy
+    private readonly googleStrategy: GoogleStrategy,
   ) {}
 
   async register(createUserDto: CreateUserDto): Promise<User> {
@@ -25,8 +27,10 @@ export class AuthService {
       const { email, password } = createUserDto;
       const hashedPassword = await bcrypt.hash(password, 10);
       const user = new this.userModel({ email, password: hashedPassword });
+      this.logger.log('User data updated successfully'); // Info level
       return user.save();
     } catch (error) {
+      this.logger.error('This is a log auth service', error?.message); // Info level
       throw new Error(error?.message);
     }
   }
@@ -41,6 +45,7 @@ export class AuthService {
         token: this.jwtService.sign(payload),
       };
     } else {
+      this.logger.error(ResponseMessage.INVALID_CREDENTIALS); // Info level
       throw new Error(ResponseMessage.INVALID_CREDENTIALS);
     }
   }
@@ -59,9 +64,10 @@ export class AuthService {
   }
 
   async validateUser(profile: any): Promise<User | null> {
+    console.log(profile);
     // Check if user exists in your database
     // If not, create a new user and return it
     // Return null if user not found
-    return
+    return;
   }
- }
+}
